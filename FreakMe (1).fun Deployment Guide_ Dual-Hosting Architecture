@@ -1,0 +1,385 @@
+# FreakMe.fun Deployment Guide: Dual-Hosting Architecture
+
+## Table of Contents
+1. [Overview](#overview)
+2. [Web2 Deployment (Vercel)](#web2-deployment-vercel)
+3. [Web3 Deployment (IPFS/Fleek/ENS)](#web3-deployment-ipfsfleekens)
+4. [DNS Configuration (Cloudflare)](#dns-configuration-cloudflare)
+5. [Testing and Validation](#testing-and-validation)
+6. [Phased Rollout Strategy](#phased-rollout-strategy)
+7. [Monitoring and Maintenance](#monitoring-and-maintenance)
+8. [Troubleshooting](#troubleshooting)
+
+## Overview
+
+The FreakMe.fun project uses a dual-hosting architecture that separates content between traditional Web2 hosting (Vercel) and decentralized Web3 hosting (IPFS/Fleek/ENS). This approach provides several benefits:
+
+1. **Gradual Web3 Adoption**: Start with familiar Web2 infrastructure while preparing for Web3 features
+2. **Optimized Performance**: Serve static content from CDNs while keeping decentralized content on IPFS
+3. **Enhanced Security**: Distribute sensitive content across decentralized networks
+4. **Future-Proofing**: Build infrastructure ready for full Web3 integration
+
+The deployment process involves setting up both hosting environments and configuring DNS to route traffic appropriately.
+
+## Web2 Deployment (Vercel)
+
+### Prerequisites
+- Vercel account
+- Node.js 18+ installed locally
+- Git repository with your FreakMe.fun code
+
+### Step 1: Prepare Your Project for Vercel
+
+1. Ensure your project has a proper `package.json` file:
+
+```json
+{
+  "name": "freakme-fun",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "export": "next build && next export"
+  },
+  "dependencies": {
+    "next": "^12.3.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
+```
+
+2. Create a `vercel.json` configuration file:
+
+```json
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "out" }
+    }
+  ],
+  "routes": [
+    { "src": "/models", "dest": "/pages/models.html" },
+    { "src": "/freak-me", "dest": "/pages/freak-me.html" },
+    { "src": "/faq", "dest": "/pages/faq.html" },
+    { "src": "/members-treat", "dest": "/pages/members-treat.html" },
+    { "src": "/web3-coming-soon", "dest": "/web3-coming-soon.html" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
+}
+```
+
+### Step 2: Deploy to Vercel
+
+#### Option A: Using Vercel CLI
+
+1. Install Vercel CLI:
+```bash
+npm install -g vercel
+```
+
+2. Login to Vercel:
+```bash
+vercel login
+```
+
+3. Deploy your project:
+```bash
+cd /path/to/freakme_comprehensive_master
+vercel --prod
+```
+
+#### Option B: Using Vercel Dashboard
+
+1. Go to [vercel.com](https://vercel.com) and log in
+2. Click "New Project"
+3. Import your Git repository or upload your project files
+4. Configure project settings:
+   - Framework Preset: Other
+   - Build Command: `npm run export`
+   - Output Directory: `out`
+5. Click "Deploy"
+
+### Step 3: Configure Custom Domain on Vercel
+
+1. In your Vercel project dashboard, go to "Settings" > "Domains"
+2. Add your domain: `freakme.fun`
+3. Follow Vercel's instructions for domain verification
+4. Note the Vercel DNS records for later Cloudflare configuration
+
+## Web3 Deployment (IPFS/Fleek/ENS)
+
+### Prerequisites
+- Fleek.co account
+- Ethereum wallet with some ETH (for ENS)
+- Web3 content prepared for deployment
+
+### Step 1: Prepare Web3 Content
+
+1. Organize your Web3 content in a separate directory structure:
+```
+web3/
+├── nft-drop/
+│   └── index.html
+├── wallet-only/
+│   └── index.html
+├── dao/
+│   └── index.html
+├── zora-preview/
+│   └── index.html
+└── assets/
+    ├── css/
+    ├── js/
+    └── images/
+```
+
+2. Ensure each page has proper metadata for IPFS:
+```html
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreakMe.fun - NFT Drops</title>
+  <!-- IPFS-specific metadata -->
+  <meta name="ipfs:gateway" content="https://ipfs.io/ipfs/">
+  <meta name="ipfs:cid" content="YOUR_CONTENT_ID">
+  <!-- Other metadata -->
+</head>
+```
+
+### Step 2: Deploy to Fleek
+
+1. Log in to [Fleek.co](https://fleek.co)
+2. Click "Add new site"
+3. Connect to your repository or upload files directly
+4. Configure deployment settings:
+   - Framework: Static Site
+   - Build Command: Leave blank for now (or use your build command if needed)
+   - Publish Directory: `web3`
+5. Click "Deploy site"
+
+### Step 3: Configure ENS Domain (Optional)
+
+1. Purchase an ENS domain at [app.ens.domains](https://app.ens.domains)
+2. Set the Content Record to your IPFS CID from Fleek
+3. Set up DNSLink for your domain
+4. Configure the Resolver to point to your IPFS content
+
+### Step 4: Note Your IPFS Deployment URLs
+
+After deployment, note the following URLs:
+- IPFS Gateway URL: `https://ipfs.io/ipfs/YOUR_CID`
+- Fleek URL: `https://your-site-name.on.fleek.co`
+- ENS URL (if configured): `https://your-name.eth.limo`
+
+## DNS Configuration (Cloudflare)
+
+### Prerequisites
+- Cloudflare account
+- Domain registered and transferred to Cloudflare
+
+### Step 1: Add Domain to Cloudflare
+
+1. Log in to Cloudflare
+2. Click "Add a Site" and enter your domain: `freakme.fun`
+3. Follow the steps to verify domain ownership
+4. Ensure your domain's nameservers are pointed to Cloudflare
+
+### Step 2: Configure DNS Records for Web2 Content
+
+1. Go to DNS management for your domain
+2. Add the following records for Vercel:
+   - Type: A
+   - Name: @
+   - Value: 76.76.21.21 (Vercel's IP)
+   - TTL: Auto
+   - Proxy status: Proxied
+
+3. Add CNAME for www subdomain:
+   - Type: CNAME
+   - Name: www
+   - Value: cname.vercel-dns.com
+   - TTL: Auto
+   - Proxy status: Proxied
+
+### Step 3: Configure Page Rules for Routing
+
+1. Go to "Rules" > "Page Rules"
+2. Add rules to route Web3 content:
+   - URL pattern: `freakme.fun/nft-drop*`
+   - Setting: Forwarding URL
+   - Status: 301
+   - Destination URL: `https://your-site-name.on.fleek.co/nft-drop`
+
+3. Repeat for other Web3 routes:
+   - `freakme.fun/wallet-only*`
+   - `freakme.fun/dao*`
+   - `freakme.fun/zora-preview*`
+
+### Step 4: Configure Cloudflare Workers (Optional)
+
+For more advanced routing, create a Cloudflare Worker:
+
+```javascript
+addEventListener('fetch', event => {
+  event.respondWith(handleRequest(event.request))
+})
+
+async function handleRequest(request) {
+  const url = new URL(request.url)
+  
+  // Define Web3 routes
+  const web3Routes = ['/nft-drop', '/wallet-only', '/dao', '/zora-preview']
+  
+  // Check if the path matches any Web3 route
+  const isWeb3Route = web3Routes.some(route => 
+    url.pathname.startsWith(route)
+  )
+  
+  if (isWeb3Route) {
+    // Replace with your Fleek/IPFS URL
+    const web3BaseUrl = 'https://your-site-name.on.fleek.co'
+    return Response.redirect(`${web3BaseUrl}${url.pathname}`, 301)
+  }
+  
+  // For Web2 routes, pass through to Vercel
+  return fetch(request)
+}
+```
+
+## Testing and Validation
+
+### Step 1: Verify Web2 Deployment
+
+1. Visit your main domain: `https://freakme.fun`
+2. Check all Web2 routes:
+   - `/models`
+   - `/freak-me`
+   - `/faq`
+   - `/members-treat`
+3. Test the Web3 Coming Soon button and landing page
+4. Verify mobile responsiveness
+
+### Step 2: Verify DNS Configuration
+
+1. Use DNS lookup tools:
+```bash
+dig freakme.fun
+dig www.freakme.fun
+```
+
+2. Check DNS propagation:
+   - [whatsmydns.net](https://www.whatsmydns.net/)
+   - [dnschecker.org](https://dnschecker.org/)
+
+### Step 3: Test Web3 Routing (When Ready)
+
+1. Visit Web3 routes (these will redirect to Coming Soon during initial phase):
+   - `/nft-drop`
+   - `/wallet-only`
+   - `/dao`
+   - `/zora-preview`
+2. Verify IPFS content loading
+3. Test ENS resolution (if configured)
+
+## Phased Rollout Strategy
+
+### Phase 1: Web2 Launch with Web3 Coming Soon
+
+1. Deploy Web2 content to Vercel
+2. Configure DNS for Web2 routes
+3. Implement Web3 Coming Soon button and landing page
+4. Collect email notifications for Web3 launch
+
+### Phase 2: Limited Web3 Features
+
+1. Deploy initial Web3 content to IPFS/Fleek
+2. Update DNS/Workers to route specific Web3 paths
+3. Enable wallet connection for authenticated users
+4. Launch NFT preview functionality
+
+### Phase 3: Full Web3 Integration
+
+1. Deploy complete Web3 functionality
+2. Configure ENS for decentralized access
+3. Implement DAO governance features
+4. Enable full NFT marketplace integration
+
+## Monitoring and Maintenance
+
+### Web2 Monitoring
+
+1. Set up Vercel Analytics
+2. Configure uptime monitoring:
+   - [UptimeRobot](https://uptimerobot.com/)
+   - [Pingdom](https://www.pingdom.com/)
+3. Implement error tracking:
+   - [Sentry](https://sentry.io/)
+   - [LogRocket](https://logrocket.com/)
+
+### Web3 Monitoring
+
+1. Monitor IPFS gateway performance
+2. Track ENS resolution status
+3. Set up alerts for smart contract interactions
+4. Monitor gas prices for transaction optimization
+
+### Backup Strategy
+
+1. Regularly backup Vercel deployments
+2. Pin IPFS content to multiple nodes
+3. Maintain local copies of all deployment files
+4. Document all configuration settings
+
+## Troubleshooting
+
+### Common Web2 Issues
+
+1. **Vercel Deployment Failures**
+   - Check build logs for errors
+   - Verify package.json configuration
+   - Ensure all dependencies are properly installed
+
+2. **DNS Resolution Problems**
+   - Verify Cloudflare nameservers are correctly set
+   - Check for conflicting DNS records
+   - Allow sufficient time for DNS propagation (24-48 hours)
+
+3. **Routing Errors**
+   - Verify vercel.json configuration
+   - Check Cloudflare Page Rules
+   - Test with cache bypassing (Ctrl+F5)
+
+### Common Web3 Issues
+
+1. **IPFS Content Not Loading**
+   - Verify content is properly pinned
+   - Check gateway status
+   - Try alternative IPFS gateways
+
+2. **ENS Resolution Failures**
+   - Verify ENS records are correctly set
+   - Check for expired ENS domains
+   - Ensure resolver is properly configured
+
+3. **Wallet Connection Issues**
+   - Test with multiple browsers and wallets
+   - Verify Web3 provider configuration
+   - Check for RPC endpoint issues
+
+### Support Resources
+
+- Vercel Documentation: [vercel.com/docs](https://vercel.com/docs)
+- IPFS Documentation: [docs.ipfs.io](https://docs.ipfs.io/)
+- Fleek Documentation: [docs.fleek.co](https://docs.fleek.co/)
+- ENS Documentation: [docs.ens.domains](https://docs.ens.domains/)
+- Cloudflare Documentation: [developers.cloudflare.com](https://developers.cloudflare.com/)
+
+For technical assistance, contact:
+- Web2 Support: web2-support@freakme.fun
+- Web3 Support: web3-support@freakme.fun
+- DNS/Infrastructure: devops@freakme.fun

@@ -1,0 +1,57 @@
+[
+    {
+        "name": "feature",
+        "color": "2b6cb0",
+        "description": "New feature request or module"
+    },
+    {
+        "name": "bug",
+        "color": "e53e3e",
+        "description": "Something is broken or not working"
+    },
+    {
+        "name": "hotfix",
+        "color": "d69e2e",
+        "description": "Urgent fix to production"
+    },
+    {
+        "name": "web2-core",
+        "color": "38b2ac",
+        "description": "Related to Web2 stack (Next.js, Make.com)"
+    },
+    {
+        "name": "web3-infra",
+        "color": "805ad5",
+        "description": "Related to Web3 infra (WalletConnect, IPFS)"
+    },
+    {
+        "name": "wallet-login",
+        "color": "9f7aea",
+        "description": "Wallet login and auth UX"
+    },
+    {
+        "name": "model-ui",
+        "color": "f687b3",
+        "description": "Model-facing UI/UX and dashboards"
+    },
+    {
+        "name": "dao-tools",
+        "color": "63b3ed",
+        "description": "Smart contract, token, DAO logic"
+    },
+    {
+        "name": "design",
+        "color": "f6ad55",
+        "description": "Visual design, Tailwind, theme updates"
+    },
+    {
+        "name": "ready",
+        "color": "48bb78",
+        "description": "Ready for development"
+    },
+    {
+        "name": "blocked",
+        "color": "ed8936",
+        "description": "Blocked or pending another task"
+    }
+]

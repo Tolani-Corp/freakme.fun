@@ -1,0 +1,155 @@
+<!-- Discreet Freaks - Creator Card Template (Notion Synced Block) -->
+<div class="df-creator-card">
+  <style>
+    .df-creator-card {
+      font-family: 'Inter', 'Helvetica Neue', sans-serif;
+      border-radius: 12px;
+      overflow: hidden;
+      background-color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+    .df-creator-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    .df-creator-image {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      position: relative;
+      background: linear-gradient(135deg, #ec4899 0%, #4a044e 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .df-creator-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .df-creator-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background-color: #ec4899;
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .df-creator-info {
+      padding: 16px;
+    }
+    .df-creator-name {
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .df-creator-location {
+      color: #6b7280;
+      font-size: 14px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .df-creator-stats {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid #f3f4f6;
+      font-size: 14px;
+    }
+    .df-creator-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .df-creator-stat-value {
+      font-weight: 700;
+      color: #0e0e0e;
+    }
+    .df-creator-stat-label {
+      color: #6b7280;
+      font-size: 12px;
+    }
+    .df-creator-cta {
+      background-color: #ec4899;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 0;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 16px;
+      transition: all 0.2s ease;
+    }
+    .df-creator-cta:hover {
+      background-color: #f472b6;
+    }
+  </style>
+  
+  <div class="df-creator-image">
+    <img src="{{creator_image_url}}" alt="{{creator_name}}">
+    <div class="df-creator-badge">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+    </div>
+  </div>
+  
+  <div class="df-creator-info">
+    <div class="df-creator-name">
+      {{creator_name}}
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+      </svg>
+    </div>
+    
+    <div class="df-creator-location">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+        <circle cx="12" cy="10" r="3"></circle>
+      </svg>
+      {{creator_location}}
+    </div>
+    
+    <div class="df-creator-stats">
+      <div class="df-creator-stat">
+        <div class="df-creator-stat-value">{{content_count}}</div>
+        <div class="df-creator-stat-label">Content</div>
+      </div>
+      <div class="df-creator-stat">
+        <div class="df-creator-stat-value">{{likes_count}}</div>
+        <div class="df-creator-stat-label">Likes</div>
+      </div>
+      <div class="df-creator-stat">
+        <div class="df-creator-stat-value">{{rating}}</div>
+        <div class="df-creator-stat-label">Rating</div>
+      </div>
+    </div>
+    
+    <button class="df-creator-cta">View Profile</button>
+  </div>
+</div>
+
+<!-- Notion Synced Block Instructions -->
+<!-- 
+1. Create a new page in Notion for this template
+2. Add this HTML as an embed
+3. Create a synced block from this page
+4. Use the synced block on /models and multilingual pages
+5. Replace {{variables}} with actual creator data or Notion database properties
+-->

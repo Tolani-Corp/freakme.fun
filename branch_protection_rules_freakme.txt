@@ -1,0 +1,10 @@
+
+# GitHub Branch Protection (main branch)
+
+1. Require pull request reviews before merging
+2. Require status checks to pass before merging
+3. Require signed commits (DCO enabled)
+4. Require linear history (optional)
+5. Include administrators (recommended)
+
+🛡 Recommended for branch: `main`
