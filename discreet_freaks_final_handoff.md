@@ -382,7 +382,7 @@ All source files have been prepared for transfer to Limewire as requested. The t
 
 This handoff document provides your development and web teams with all necessary information to implement and maintain the Discreet Freaks website, CMS, and automation framework. The project has been designed with scalability, security, and automation as core principles, ensuring long-term viability and minimal operational overhead.
 
-For any questions or clarifications, please contact the project team at support@freakme.fun.
+For any questions or clarifications, please contact the project team at info@tolanicorp.us.
 
 ---
 
