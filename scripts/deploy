@@ -1,0 +1,23 @@
+
+# 🔐 FREAKME.FUN Production Environment Variables
+
+# Flask config
+FLASK_SECRET_KEY=your-flask-secret-key-here
+
+# JWT Config
+JWT_SECRET_KEY=your-jwt-secret-key-here
+
+# File Encryption
+FERNET_KEY=your-generated-fernet-key-here
+
+# Deployment
+DEPLOY_ENV=production
+PORT=5000
+CONTAINER_NAME=freakme-fun
+IMAGE_NAME=tolanicorpdev/freakme.fun
+TZ=America/New_York
+
+# Optional services
+POSTGRES_PASSWORD=your-postgres-password
+SENDGRID_API_KEY=your-sendgrid-api-key
+SENTRY_DSN=your-sentry-dsn
