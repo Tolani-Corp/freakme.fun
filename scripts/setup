@@ -1,0 +1,23 @@
+
+# ========================
+# 🔐 PRODUCTION ENV (.env.production)
+# ========================
+
+# Flask Runtime
+FLASK_ENV=production
+FLASK_SECRET_KEY=your_flask_secret_key_here
+
+# JWT / Session
+JWT_SECRET_KEY=your_jwt_secret_key_here
+
+# Encryption Key (for uploads)
+FERNET_KEY=your_fernet_encryption_key_here
+
+# Cloudflare Stream
+CLOUDFLARE_ACCOUNT_ID=your_cloudflare_account_id
+CLOUDFLARE_STREAM_API_TOKEN=your_stream_api_token
+CLOUDFLARE_STREAM_ENDPOINT=https://api.cloudflare.com/client/v4/accounts/your_cloudflare_account_id/stream
+
+# App Info
+DEPLOY_ENV=production
+PORT=10000
