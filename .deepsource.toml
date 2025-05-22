@@ -1,7 +1,54 @@
 version = 1
 
+# Project name
+name = "freakme.fun"
+
+# Enable analyzers
 [[analyzers]]
 name = "javascript"
+enabled = true
 
+[analyzers.meta]
+runtime_version = "18.x" # Match your Node.js version (Next.js default is 18+)
+
+# Enable experimental AI features (optional)
+[analyzers.config]
+experimental = true
+
+# Exclude paths (build artifacts, config, etc.)
+exclude_paths = [
+  "node_modules/",
+  ".next/",
+  "dist/",
+  "public/",
+  ".vercel/",
+  "**/*.d.ts"
+]
+
+# Include paths you want scanned
+include_paths = [
+  "src/",
+  "components/",
+  "pages/",
+  "lib/",
+  "utils/"
+]
+
+# Configuration for issues you want ignored (optional)
+# Example: Ignore missing PropTypes in React
+[[analyzers.ignored_issues]]
+code = "JS-0346"
+path = "**/*.tsx"
+
+# Enable security scanner
 [[analyzers]]
 name = "security"
+enabled = true
+
+# CI integration setup (optional)
+[ci]
+upload = true
+
+# Repository settings
+[repository]
+branch = "main"
