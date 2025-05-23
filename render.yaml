@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: freakmefun-api
+    env: python
+    rootDirectory: server
+    buildCommand: ""
+    startCommand: "python run.py"
+    envVars:
+      - key: FERNET_KEY
+        sync: false
+    autoDeploy: true
+    plan: free
+    region: oregon

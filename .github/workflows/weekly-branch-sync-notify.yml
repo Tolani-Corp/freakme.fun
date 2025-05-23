@@ -1,0 +1,76 @@
+# Create a GitHub Actions YAML that includes Discord, Telegram, and WhatsApp webhook integration
+
+notification_workflow = """
+name: Weekly Branch Sync with Notifications
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'  # Every Monday at 09:00 UTC
+  workflow_dispatch:
+
+jobs:
+  sync-and-notify:
+    runs-on: ubuntu-latest
+
+    env:
+      DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      WHATSAPP_WEBHOOK: ${{ secrets.WHATSAPP_WEBHOOK }}
+
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup GitHub CLI and dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq gh
+          gh auth setup-git
+
+      - name: Add upstream and fetch branches
+        run: |
+          git remote add upstream https://github.com/Tolani-Corp/freakme.fun.git || true
+          git fetch upstream
+
+          BRANCHES=("infra/setup-scripts" "feature/video-encryption" "feature/web3-auth" "feature/cloudflare-integration")
+          for BRANCH in "${BRANCHES[@]}"
+          do
+            git checkout -B $BRANCH upstream/$BRANCH || continue
+            git push -u origin $BRANCH || true
+            gh pr create \\
+              --base main \\
+              --head $BRANCH \\
+              --title "Sync: $BRANCH from upstream" \\
+              --body "Auto-synced from upstream Tolani-Corp/freakme.fun:$BRANCH" \\
+              --label "sync" \\
+              --label "infra" \\
+              --assignee "$(gh api user | jq -r .login)" || true
+
+            echo "✅ PR created for $BRANCH"
+
+            # Notify Discord
+            curl -X POST -H "Content-Type: application/json" \\
+              -d '{"content": "🔔 Sync PR created: '"$BRANCH"' → main"}' $DISCORD_WEBHOOK
+
+            # Notify Telegram
+            curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \\
+              -d chat_id="$TELEGRAM_CHAT_ID" \\
+              -d text="📢 Sync PR created: $BRANCH → main"
+
+            # Notify WhatsApp (custom webhook)
+            curl -X POST -H "Content-Type: application/json" \\
+              -d '{"message": "📬 Sync PR created: '"$BRANCH"' → main"}' $WHATSAPP_WEBHOOK
+          done
+"""
+
+# Save the enhanced workflow with notifications
+workflow_notify_path = "/mnt/data/.github/workflows/weekly-branch-sync-notify.yml"
+os.makedirs(os.path.dirname(workflow_notify_path), exist_ok=True)
+
+with open(workflow_notify_path, "w") as f:
+    f.write(notification_workflow.strip())
+
+workflow_notify_path
